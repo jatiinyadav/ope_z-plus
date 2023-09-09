@@ -14,11 +14,13 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(uuid())
-  email        String  @unique
-  name         String?
-  writtenPosts Post[]  @relation("WrittenPosts")
-  favPosts     Post[]  @relation("FavPosts")
+  id            String  @id @default(uuid())
+  email         String  @unique
+  name          String?
+  author        Post?   @relation("1", fields: [authorPostsId], references: [id])
+  authorPostsId String? @unique
+  favPosts      Post?   @relation("2", fields: [favPostsId], references: [id])
+  favPostsId    String? @unique
 }
 
 model Post {
@@ -26,10 +28,9 @@ model Post {
   rating    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-  author    User     @relation("WrittenPosts", fields: [authorId], references: [id])
-  authorId  String
-  favBy     User?    @relation("FavPosts", fields: [favById], references: [id])
-  favById   String?
+
+  favPostsUser     User? @relation("1")
+  writtenPostsUser User? @relation("2")
 }
 
 // SQL lite doesn't support enums
