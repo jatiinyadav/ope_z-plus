@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { log } from 'console'
-const prisma = new PrismaClient()
+const prisma = new PrismaClient()  // To view queries BTS working in Prisma PrismaClient({log: ["query"]})
 
 async function main() {
     await prisma.user.deleteMany()
@@ -18,9 +17,14 @@ async function main() {
                     rating: 3
                 }
             }
-        }, include: {
-            author: true,
-            favPosts: true
+        },
+        select: {
+            name: true,
+            author: {
+                select: {
+                    rating: true
+                }
+            }
         }
     })
     console.log(user);
