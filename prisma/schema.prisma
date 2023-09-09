@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// When you migrate Generator Creates library which can be used to interact with prisma library
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +14,26 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id           String  @id @default(uuid())
+  email        String  @unique
+  name         String?
+  writtenPosts Post[]  @relation("WrittenPosts")
+  favPosts     Post[]  @relation("FavPosts")
 }
+
+model Post {
+  id        String   @id @default(uuid())
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  author    User     @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId  String
+  favBy     User?    @relation("FavPosts", fields: [favById], references: [id])
+  favById   String?
+}
+
+// SQL lite doesn't support enums
+// enum Roles {
+//   BASIC
+//   ADMIN
+// }
