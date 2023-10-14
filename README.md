@@ -4,14 +4,13 @@ Steps:
 2. npm install nodemon typescript ts-node @types/node --save-dev
 3. npx tsc --init
 4. npm install prisma --save-dev
-5. npx prisma init --datasource-provider sqlite
+5. npm i @prisma/client
+6. npx prisma init --datasource-provider sqlite
+8. Create Schema
 
-6. Create Schema
+9. npx prisma migrate dev --name init
 
-7. npx prisma migrate dev --name init
-
-8. For safe side: npm i @prisma/client
-Create script.ts
+10. Create script.ts
 In Package.json add "devStart": "nodemon script.ts"
 
 npx prisma format to build relations in Models
